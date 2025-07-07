@@ -393,32 +393,25 @@ router.delete('/delink', async (req, res) => {
     await db.query('BEGIN');
 
     try {
-      // Delete from user_profiles table
+      // Delete from user_profiles
       await db.query(
         'DELETE FROM user_profiles WHERE user_id = $1 AND platform = $2',
         [userId, platform]
       );
 
-      // Delete from user_platform_stats table
+      // Delete from user_platform_stats
       await db.query(
         'DELETE FROM user_platform_stats WHERE user_id = $1 AND platform = $2',
         [userId, platform]
       );
 
-      // Delete from user_score_history table (if you want to remove history)
-      // Note: You might want to keep history for analytics, so this is optional
-      // await db.query(
-      //   'DELETE FROM user_score_history WHERE user_id = $1 AND platform = $2',
-      //   [userId, platform]
-      // );
-
-      // Commit transaction
+      // Fetch remaining stats to recalculate score
       const remainingStats = await db.query(
-        'SELECT * FROM user_platform_stats WHERE user_id = $1 AND platform != $2',
-        [userId, platform]
+        'SELECT * FROM user_platform_stats WHERE user_id = $1',
+        [userId]
       );
 
-      // Recalculate total score (use your existing score calculation logic)
+      // Recalculate total score
       let newTotalScore = 0;
       const weights = { codeforces: 0.4, leetcode: 0.3, codechef: 0.2, gfg: 0.1 };
 
@@ -431,21 +424,27 @@ router.delete('/delink', async (req, res) => {
         }
       }
 
-      // Insert new score history entry
-      await db.query(
-        'INSERT INTO user_score_history (user_id, total_score, snapshot_time) VALUES ($1, $2, NOW())',
-        [userId, Math.round(newTotalScore)]
-      );
-      
+      const roundedScore = Math.round(newTotalScore);
+
+      // ✅ Insert score snapshot only if score > 0
+      if (roundedScore > 0) {
+        await db.query(
+          'INSERT INTO user_score_history (user_id, total_score, snapshot_time) VALUES ($1, $2, NOW())',
+          [userId, roundedScore]
+        );
+        console.log(`✅ New score snapshot created for user ${userId}: ${roundedScore}`);
+      } else {
+        console.log(`⚠️ Skipped snapshot insert — score is ${roundedScore}`);
+      }
+
       await db.query('COMMIT');
 
       res.json({ 
         message: `${platform} profile delinked successfully`,
-        platform: platform 
+        platform
       });
 
     } catch (error) {
-      // Rollback transaction on error
       await db.query('ROLLBACK');
       throw error;
     }
@@ -455,6 +454,7 @@ router.delete('/delink', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 // ✅ IMPROVED: Return empty stats array and 0 score for users with no platforms
 router.get('/public-profile/:username', async (req, res) => {
