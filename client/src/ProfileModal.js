@@ -17,7 +17,7 @@ function ProfileModal({ username, isOpen, onClose }) {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await axios.get(`http://localhost:5000/api/profile/public-profile/${username}`);
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/profile/public-profile/${username}`);
       setProfile(res.data);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to fetch profile');

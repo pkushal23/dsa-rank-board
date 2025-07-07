@@ -24,7 +24,7 @@ function LinkPlatformForm({ user }) {
   // Memoize fetchLinkedProfiles to prevent unnecessary re-renders
   const fetchLinkedProfiles = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/profile/stats/${user.uid}`);
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/profile/stats/${user.uid}`);
       setLinkedProfiles(response.data);
     } catch (error) {
       console.error('Error fetching linked profiles:', error);
@@ -59,7 +59,7 @@ function LinkPlatformForm({ user }) {
 
     try {
       setIsLinking(true);
-      const res = await axios.post('http://localhost:5000/api/profile/link', {
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/profile/link`, {
         uid: user.uid,
         platform,
         handle: handle.trim()
@@ -119,7 +119,7 @@ if (confirmed) {
   try {
     setIsDelinking(true);
     
-    const res = await axios.delete('http://localhost:5000/api/profile/delink', {
+    const res = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/profile/delink`, {
       data: {
         uid: user.uid,
         platform: platformToDelink
@@ -149,7 +149,7 @@ if (confirmed) {
     setIsSyncing(true);
     
     try {
-      await axios.post(`http://localhost:5000/api/profile/sync/${user.uid}`);
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/profile/sync/${user.uid}`);
       setIsSyncing(false);
       alertManager.success(
         'Your stats have been updated! Refresh the page to see the latest data.'

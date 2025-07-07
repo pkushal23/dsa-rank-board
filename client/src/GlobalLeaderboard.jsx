@@ -12,7 +12,7 @@ function GlobalLeaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/profile/leaderboard');
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/profile/leaderboard`);
         setLeaders(res.data);
       } catch (err) {
         console.error('Failed to fetch leaderboard:', err);

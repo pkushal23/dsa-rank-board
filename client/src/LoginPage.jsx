@@ -22,7 +22,7 @@ function LoginPage() {
     const res = await signInWithPopup(auth, provider);
     const user = res.user;
 
-    await axios.post('http://localhost:5000/api/auth/login', {
+    await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
       uid: user.uid,
       name: user.displayName,
       email: user.email,

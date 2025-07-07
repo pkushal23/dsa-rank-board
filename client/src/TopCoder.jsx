@@ -14,7 +14,7 @@ function TopCoders() {
     const fetchLeaderboard = async (type) => {
         setIsLoading(true);
         try {
-            const res = await axios.get(`http://localhost:5000/api/profile/top-coders/${type}`);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/profile/top-coders/${type}`);
             if (type === "daily") {
                 setDaily(res.data);
                 setView("daily");

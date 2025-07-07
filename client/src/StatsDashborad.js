@@ -56,11 +56,11 @@ function StatsDashboard() {
         setError(null);
         
         // Fetch stats
-        const statsResponse = await axios.get(`http://localhost:5000/api/profile/stats/${user.uid}`);
+        const statsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/profile/stats/${user.uid}`);
         setStats(statsResponse.data || []);
         
         // Fetch total score
-        const scoreResponse = await axios.get(`http://localhost:5000/api/profile/score/${user.uid}`);
+        const scoreResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/profile/score/${user.uid}`);
         setScore(scoreResponse.data?.totalScore || 0);
         
       } catch (err) {
