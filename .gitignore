@@ -9,7 +9,7 @@ client/.env
 server/.env
 
 # Build files (optional if you build locally before deploy)
-client/build/
+
 
 # Logs
 *.log
