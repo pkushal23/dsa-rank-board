@@ -71,38 +71,42 @@ async function syncUserStats(userId) {
     }
   }
 
-  if (totalScore > 0) {
-    const roundedScore = Math.round(totalScore);
+  const roundedScore = Math.round(totalScore);
 
-    // Use CURRENT_DATE in DB to avoid JS timezone issues
-    const existingEntry = await db.query(
-      `SELECT id, total_score FROM user_score_history 
-       WHERE user_id = $1 AND snapshot_time::date = CURRENT_DATE`,
-      [userId]
-    );
+  // ✅ Skip if score is zero or negative (to satisfy DB constraint)
+  if (roundedScore <= 0) {
+    console.log(`⚠️ Skipping score update for user ${userId}: total score is 0 or less.`);
+    return;
+  }
 
-    if (existingEntry.rows.length > 0) {
-      const existingScore = existingEntry.rows[0].total_score;
+  // Score history logic
+  const existingEntry = await db.query(
+    `SELECT id, total_score FROM user_score_history 
+     WHERE user_id = $1 AND snapshot_time::date = CURRENT_DATE`,
+    [userId]
+  );
 
-      if (Math.abs(existingScore - roundedScore) > 0) {
-        await db.query(
-          `UPDATE user_score_history 
-           SET total_score = $1, snapshot_time = NOW() 
-           WHERE user_id = $2 AND snapshot_time::date = CURRENT_DATE`,
-          [roundedScore, userId]
-        );
-        console.log(`✅ Score updated: ${existingScore} → ${roundedScore}`);
-      } else {
-        console.log(`⚠️ No score change for user ${userId} (${roundedScore})`);
-      }
-    } else {
+  if (existingEntry.rows.length > 0) {
+    const existingScore = existingEntry.rows[0].total_score;
+
+    if (Math.abs(existingScore - roundedScore) > 0) {
       await db.query(
-        `INSERT INTO user_score_history (user_id, total_score, snapshot_time) 
-         VALUES ($1, $2, NOW())`,
-        [userId, roundedScore]
+        `UPDATE user_score_history 
+         SET total_score = $1, snapshot_time = NOW() 
+         WHERE user_id = $2 AND snapshot_time::date = CURRENT_DATE`,
+        [roundedScore, userId]
       );
-      console.log(`✅ New score snapshot created for user ${userId}: ${roundedScore}`);
+      console.log(`✅ Score updated: ${existingScore} → ${roundedScore}`);
+    } else {
+      console.log(`⚠️ No score change for user ${userId} (${roundedScore})`);
     }
+  } else {
+    await db.query(
+      `INSERT INTO user_score_history (user_id, total_score, snapshot_time) 
+       VALUES ($1, $2, NOW())`,
+      [userId, roundedScore]
+    );
+    console.log(`✅ New score snapshot created for user ${userId}: ${roundedScore}`);
   }
 }
 
