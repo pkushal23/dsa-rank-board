@@ -1,0 +1,481 @@
+/* Original App styles */
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enhanced Custom Alert Styles */
+
+/* Core Animations */
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-5px);
+  }
+  70% {
+    transform: scale(0.9) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+/* Alert Container Styles */
+.alert-container {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.alert-container.top-right {
+  top: 1rem;
+  right: 1rem;
+}
+
+.alert-container.top-left {
+  top: 1rem;
+  left: 1rem;
+}
+
+.alert-container.bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+  flex-direction: column-reverse;
+}
+
+.alert-container.bottom-left {
+  bottom: 1rem;
+  left: 1rem;
+  flex-direction: column-reverse;
+}
+
+.alert-container.top-center {
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.alert-container.bottom-center {
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: column-reverse;
+}
+
+.alert-item {
+  pointer-events: auto;
+  will-change: transform, opacity;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced hover effects */
+.alert-item:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.alert-item:hover .progress-bar {
+  animation-play-state: paused;
+}
+
+/* Progress bar enhancements */
+.progress-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+/* Custom scrollbar for alert containers */
+.alert-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.alert-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.alert-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.alert-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Enhanced focus states for accessibility */
+.alert-close-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+.confirm-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  border-radius: 0.75rem;
+}
+
+/* Backdrop blur support detection */
+@supports (backdrop-filter: blur(10px)) {
+  .alert-backdrop {
+    backdrop-filter: blur(10px);
+  }
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+  .alert-backdrop {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Enhanced responsive design */
+@media (max-width: 640px) {
+  .alert-container {
+    top: 0.5rem;
+    right: 0.5rem;
+    left: 0.5rem;
+    bottom: 0.5rem;
+  }
+  
+  .alert-container.top-center,
+  .alert-container.bottom-center {
+    transform: none;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+  
+  .alert-item {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .alert-container {
+    gap: 0.25rem;
+  }
+  
+  .alert-item {
+    font-size: 0.875rem;
+  }
+}
+
+/* Dark theme enhancements */
+@media (prefers-color-scheme: dark) {
+  .alert-item {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  }
+  
+  .alert-item:hover {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .alert-item {
+    border-width: 2px;
+    border-style: solid;
+  }
+  
+  .alert-item.success {
+    border-color: #10b981;
+  }
+  
+  .alert-item.error {
+    border-color: #ef4444;
+  }
+  
+  .alert-item.warning {
+    border-color: #f59e0b;
+  }
+  
+  .alert-item.info {
+    border-color: #3b82f6;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .alert-item {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .progress-bar {
+    animation: none !important;
+  }
+  
+  .alert-item:hover {
+    transform: none;
+  }
+  
+  .progress-bar::before {
+    animation: none !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .alert-container {
+    display: none !important;
+  }
+}
+
+/* Enhanced focus indicators for keyboard navigation */
+.alert-item:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.alert-item.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Success state animations */
+.alert-item.success {
+  animation: bounceIn 0.6s ease-out;
+}
+
+.alert-item.success .alert-icon {
+  animation: pulse 2s infinite;
+}
+
+/* Error state animations */
+.alert-item.error {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.alert-item.error:hover {
+  animation: pulse 0.5s ease-in-out;
+}
+
+/* Warning state animations */
+.alert-item.warning .alert-icon {
+  animation: pulse 1.5s infinite;
+}
+
+/* Info state animations */
+.alert-item.info {
+  animation: slideInRight 0.4s ease-out;
+}
+
+/* Stacking context for multiple alerts */
+.alert-item:nth-child(1) { z-index: 1005; }
+.alert-item:nth-child(2) { z-index: 1004; }
+.alert-item:nth-child(3) { z-index: 1003; }
+.alert-item:nth-child(4) { z-index: 1002; }
+.alert-item:nth-child(5) { z-index: 1001; }
+
+/* Utility classes for positioning */
+.alert-enter {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+}
+
+.alert-enter-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: all 0.3s ease-out;
+}
+
+.alert-exit {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.alert-exit-active {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+  transition: all 0.3s ease-in;
+}
